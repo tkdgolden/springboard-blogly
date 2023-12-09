@@ -16,6 +16,8 @@ connect_db(app)
 app.app_context().push()
 db.create_all()
 
+default_image = "https://picsum.photos/536/354"
+
 @app.route("/")
 def list_users():
     """ List users and show add form. """
@@ -26,20 +28,26 @@ def list_users():
 @app.route("/new", methods=["GET", "POST"])
 def add_user():
     """ Add new user and redirect to list """
-    
+
     if request.method == "GET":
         return render_template("new.html")
 
-    if request.method == "POST":
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        image_url = request.form['image_url']
-
+    elif request.method == "POST":
+        print("here")
+        first_name = request.form['fname']
+        last_name = request.form['lname']
+        if (request.form['image']):
+            image_url = request.form['image']
+        else:
+            image_url = default_image
+        print("1")
         user = User(first_name=first_name, last_name=last_name, image_url=image_url)
+        print("2")
         db.session.add(user)
+        print("3")
         db.session.commit()
-        print(user)
-        print(user.id)
+        print("user", user)
+        print("id", user.id)
 
         return redirect(f"/{user.id}")
 

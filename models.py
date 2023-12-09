@@ -22,6 +22,12 @@ class User(db.Model):
                           nullable = False)
     image_url = db.Column(db.String(100))
 
+    def __repr__(self):
+        """ Show info about user. """
+
+        return f"<User {self.id} {self.first_name} {self.last_name} {self.image_url}>"
+
+
     def full_name(self):
         """ Full name """
 
