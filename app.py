@@ -13,6 +13,7 @@ app.config['SECRET_KEY'] = "SECRET"
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
+app.app_context().push()
 db.create_all()
 
 @app.route("/")
@@ -22,9 +23,10 @@ def list_users():
     users = User.query.all()
     return render_template("list.html", users=users)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/new", methods=["GET", "POST"])
 def add_user():
     """ Add new user and redirect to list """
+    
     if request.method == "GET":
         return render_template("new.html")
 
@@ -36,6 +38,8 @@ def add_user():
         user = User(first_name=first_name, last_name=last_name, image_url=image_url)
         db.session.add(user)
         db.session.commit()
+        print(user)
+        print(user.id)
 
         return redirect(f"/{user.id}")
 

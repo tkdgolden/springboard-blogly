@@ -22,4 +22,8 @@ class User(db.Model):
                           nullable = False)
     image_url = db.Column(db.String(100))
 
+    def full_name(self):
+        """ Full name """
+
+        return f"{self.first_name} {self.last_name}"
 
