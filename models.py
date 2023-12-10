@@ -20,6 +20,16 @@ class User(db.Model):
                            nullable = False)
     last_name = db.Column(db.String(50),
                           nullable = False)
-    image_url = db.Column(db.String(100))
+    image_url = db.Column(db.String)
 
+    def __repr__(self):
+        """ Show info about user. """
+
+        return f"<User {self.id} {self.first_name} {self.last_name} {self.image_url}>"
+
+
+    def full_name(self):
+        """ Full name """
+
+        return f"{self.first_name} {self.last_name}"
 

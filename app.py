@@ -13,7 +13,10 @@ app.config['SECRET_KEY'] = "SECRET"
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
+app.app_context().push()
 db.create_all()
+
+default_image = "https://picsum.photos/536/354"
 
 @app.route("/")
 def list_users():
@@ -22,20 +25,29 @@ def list_users():
     users = User.query.all()
     return render_template("list.html", users=users)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/new", methods=["GET", "POST"])
 def add_user():
     """ Add new user and redirect to list """
+
     if request.method == "GET":
         return render_template("new.html")
 
-    if request.method == "POST":
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        image_url = request.form['image_url']
-
+    elif request.method == "POST":
+        print("here")
+        first_name = request.form['fname']
+        last_name = request.form['lname']
+        if (request.form['image']):
+            image_url = request.form['image']
+        else:
+            image_url = default_image
+        print("1")
         user = User(first_name=first_name, last_name=last_name, image_url=image_url)
+        print("2")
         db.session.add(user)
+        print("3")
         db.session.commit()
+        print("user", user)
+        print("id", user.id)
 
         return redirect(f"/{user.id}")
 
@@ -53,12 +65,12 @@ def edit_user(user_id):
     user = User.query.get_or_404(user_id)
 
     if request.method == "GET":
-        return redirect("edit.html", user=user)
+        return render_template("edit.html", user=user)
     
-    if request.method == "POST":
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        image_url = request.form['image_url']
+    elif request.method == "POST":
+        first_name = request.form['fname']
+        last_name = request.form['lname']
+        image_url = request.form['image']
 
         user.first_name = first_name
         user.last_name = last_name
@@ -66,3 +78,13 @@ def edit_user(user_id):
         db.session.commit()
 
         return redirect(f"/{user.id}")
+    
+@app.route("/delete/<int:user_id>", methods=["GET"])
+def delete_user(user_id):
+    """ Deletes a single user and returns to list page """
+
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect('/')
