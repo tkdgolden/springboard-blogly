@@ -3,6 +3,7 @@
 from flask import Flask, render_template, redirect, request
 from models import db, connect_db, User
 from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy import desc
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -22,7 +23,7 @@ default_image = "https://picsum.photos/536/354"
 def list_users():
     """ List users and show add form. """
 
-    users = User.query.all()
+    users = User.query.order_by(User.last_name).order_by(User.first_name).all()
     return render_template("list.html", users=users)
 
 @app.route("/new", methods=["GET", "POST"])
@@ -42,7 +43,7 @@ def add_user():
         user = User(first_name=first_name, last_name=last_name, image_url=image_url)
         db.session.add(user)
         db.session.commit()
-        
+
         return redirect(f"/{user.id}")
 
 @app.route("/<int:user_id>")
