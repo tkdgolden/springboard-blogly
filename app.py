@@ -33,22 +33,16 @@ def add_user():
         return render_template("new.html")
 
     elif request.method == "POST":
-        print("here")
         first_name = request.form['fname']
         last_name = request.form['lname']
         if (request.form['image']):
             image_url = request.form['image']
         else:
             image_url = default_image
-        print("1")
         user = User(first_name=first_name, last_name=last_name, image_url=image_url)
-        print("2")
         db.session.add(user)
-        print("3")
         db.session.commit()
-        print("user", user)
-        print("id", user.id)
-
+        
         return redirect(f"/{user.id}")
 
 @app.route("/<int:user_id>")
