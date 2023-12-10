@@ -65,12 +65,12 @@ def edit_user(user_id):
     user = User.query.get_or_404(user_id)
 
     if request.method == "GET":
-        return redirect("edit.html", user=user)
+        return render_template("edit.html", user=user)
     
-    if request.method == "POST":
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        image_url = request.form['image_url']
+    elif request.method == "POST":
+        first_name = request.form['fname']
+        last_name = request.form['lname']
+        image_url = request.form['image']
 
         user.first_name = first_name
         user.last_name = last_name
