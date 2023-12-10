@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %} List {% endblock %}
+
+{% block body %}
+
+<h1>All Users</h1>
+<ul>
+    {% for user in users %}
+    <li><img src="{{ user.image_url }}"/><a href="/{{ user.id }}"> {{ user.full_name() }}</a></li>
+    {% endfor %}
+</ul>
+<a href="/new"><button type="button">Add User</button></a>
+
+{% endblock %}
