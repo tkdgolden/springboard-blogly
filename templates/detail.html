@@ -7,12 +7,12 @@
 <img src="{{ user.image_url }}"/>
 <h1>{{ user.full_name() }}</h1>
 <a href="/edit/{{ user.id }}"><button type="button">Edit</button></a>
-<a href = "/delete/{{ user.id }}"><button type="button">Delete</button></a>
+<a href = "/delete/user/{{ user.id }}"><button type="button">Delete</button></a>
 <br>
 <h2>Posts</h2>
 <ul>
     {% for each in posts %}
-    <li><a href="/post/{{ each.title }}">{{ each.title }}</a></li>
+    <li><a href="/post/{{ each.id }}">{{ each.title }}</a></li>
     {% endfor %}
 </ul>
 <a href="/add/{{ user.id }}"><button type="button">Add Post</button></a>

@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, render_template, redirect, request
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy import desc
 
@@ -75,7 +75,7 @@ def edit_user(user_id):
 
         return redirect(f"/user/{user.id}")
     
-@app.route("/delete/<int:user_id>", methods=["GET"])
+@app.route("/delete/user/<int:user_id>", methods=["GET"])
 def delete_user(user_id):
     """ Deletes a single user and returns to list page """
 
@@ -84,3 +84,11 @@ def delete_user(user_id):
     db.session.commit()
 
     return redirect('/')
+
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    """ Displays a single post content """
+
+    post = Post.query.get_or_404(post_id)
+    
+    return render_template('post.html', post=post)
