@@ -28,7 +28,7 @@ def list_users():
 
 @app.route("/new", methods=["GET", "POST"])
 def add_user():
-    """ Add new user and redirect to list """
+    """ Add new user and redirect to their details """
 
     if request.method == "GET":
         return render_template("new.html")
@@ -44,7 +44,7 @@ def add_user():
         db.session.add(user)
         db.session.commit()
 
-        return redirect(f"/{user.id}")
+        return redirect(f"/user/{user.id}")
 
 @app.route("/user/<int:user_id>")
 def user_detail(user_id):
@@ -92,3 +92,22 @@ def post(post_id):
     post = Post.query.get_or_404(post_id)
     
     return render_template('post.html', post=post)
+
+@app.route("/add/<int:user_id>", methods=["GET", "POST"])
+def add_post(user_id):
+    """ Adds a new post and redirects to post page """
+
+    user = User.query.get_or_404(user_id)
+
+    if request.method == "GET":
+        return render_template("add.html", user=user)
+    
+    elif request.method == "POST":
+        title = request.form['title']
+        content = request.form['content']
+
+        post = Post(title=title, content=content, user_id=user.id)
+        db.session.add(post)
+        db.session.commit()
+
+        return redirect(f"/post/{post.id}")
