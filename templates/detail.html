@@ -9,5 +9,12 @@
 <a href="/edit/{{ user.id }}"><button type="button">Edit</button></a>
 <a href = "/delete/{{ user.id }}"><button type="button">Delete</button></a>
 <br>
+<h2>Posts</h2>
+<ul>
+    {% for each in posts %}
+    <li><a href="/post/{{ each.title }}">{{ each.title }}</a></li>
+    {% endfor %}
+</ul>
+<a href="/add/{{ user.id }}"><button type="button">Add Post</button></a>
 <a href="/"><button type="button">Back to All Users</button></a>
 {% endblock %}

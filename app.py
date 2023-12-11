@@ -46,12 +46,13 @@ def add_user():
 
         return redirect(f"/{user.id}")
 
-@app.route("/<int:user_id>")
+@app.route("/user/<int:user_id>")
 def user_detail(user_id):
     """ Show info on a single user. """
 
     user = User.query.get_or_404(user_id)
-    return render_template("detail.html", user=user)
+    posts = user.posts
+    return render_template("detail.html", user=user, posts=posts)
 
 @app.route("/edit/<int:user_id>", methods=["GET", "POST"])
 def edit_user(user_id):
@@ -72,7 +73,7 @@ def edit_user(user_id):
         user.image_url = image_url
         db.session.commit()
 
-        return redirect(f"/{user.id}")
+        return redirect(f"/user/{user.id}")
     
 @app.route("/delete/<int:user_id>", methods=["GET"])
 def delete_user(user_id):
