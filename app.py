@@ -111,3 +111,29 @@ def add_post(user_id):
         db.session.commit()
 
         return redirect(f"/post/{post.id}")
+    
+@app.route("/change/<int:post_id>", methods=["GET", "POST"])
+def change_post(post_id):
+    """ Changes a post and redirects to post page """
+
+    post = Post.query.get_or_404(post_id)
+
+    if request.method == "GET":
+        return render_template("change.html", post=post)
+    
+    elif request.method == "POST":
+        post.title = request.form['title']
+        post.content = request.form['content']
+
+        db.session.commit()
+
+        return redirect(f"/post/{post.id}")
+    
+@app.route('/delete/post/<int:post_id>')
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect(f"/user/{post.user_id}")
