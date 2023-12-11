@@ -24,7 +24,8 @@ def list_users():
     """ List users and show add form. """
 
     users = User.query.order_by(User.last_name).order_by(User.first_name).all()
-    return render_template("list.html", users=users)
+    posts = Post.query.order_by(Post.created_at).limit(5)
+    return render_template("list.html", users=users, posts=posts)
 
 @app.route("/new", methods=["GET", "POST"])
 def add_user():
