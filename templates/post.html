@@ -7,6 +7,7 @@
 <h1>{{ post.title }}</h1>
 <p>{{ post.content }}</p>
 <a href="/user/{{ post.user_id }}"><i>By: {{ post.user.full_name() }}</i></a><br>
+<p><b>Tags: {% for tag in post.tags %}<a href="/tag/{{ tag.id }}"><button type="button">{{ tag.name }}</button></a>{% endfor %}</b></p>
 <a href="/change/{{ post.id }}"><button type="button">Edit</button></a>
 <a href="/delete/post/{{ post.id }}"><button type="button">Delete</button></a>
 {% endblock %}

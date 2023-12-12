@@ -1,4 +1,4 @@
-from models import User, Post, db
+from models import User, Post, db, Tag
 
 db.drop_all()
 db.create_all()
@@ -24,5 +24,21 @@ db.session.add(gin)
 db.session.add(disgusting)
 db.session.add(lips)
 db.session.add(wounds)
+
+db.session.commit()
+
+serious = Tag(name="deep")
+funny = Tag(name="funny")
+
+db.session.add(serious)
+db.session.add(funny)
+
+db.session.commit()
+
+funny.posts.append(gin)
+funny.posts.append(disgusting)
+funny.posts.append(hell)
+hell.tags.append(serious)
+wounds.tags.append(serious)
 
 db.session.commit()

@@ -51,7 +51,32 @@ class Post(db.Model):
                         nullable = False)
     created_at = db.Column(db.DateTime,
                            default = datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'))
 
     user = db.relationship('User')
+    tags = db.relationship('Tag', secondary='post_tags')
 
+class Tag(db.Model):
+    """ optional, ties posts together by topic """
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer,
+                   primary_key = True,
+                   autoincrement = True)
+    name = db.Column(db.String(20))
+
+    posts = db.relationship('Post', secondary='post_tags')
+
+class PostTag(db.Model):
+    """ a tag can have many posts, a post can have many tags """
+
+    __tablename__ = "post_tags"
+
+    post_id = db.Column(db.Integer,
+                        db.ForeignKey('posts.id'),
+                        primary_key = True)
+    tag_id = db.Column(db.Integer,
+                       db.ForeignKey('tags.id'),
+                       primary_key = True)
